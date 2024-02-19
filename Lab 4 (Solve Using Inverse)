@@ -1,0 +1,47 @@
+L = 1;
+Nx = 10;
+dx = L / (Nx - 1);
+k = 1;
+
+A = zeros(Nx, Nx);
+A(1, 1) = 1;
+for i = 2:Nx-1
+    A(i, i-1) = -k / dx^2;
+    A(i, i) = 2*k / dx^2;
+    A(i, i+1) = -k / dx^2;
+end
+A(Nx, Nx) = 1;
+
+b = zeros(Nx, 1);
+b(1) = 500;
+b(Nx) = 200;
+
+T = inv(A)* b;
+L = 1;
+Nx = 10;
+dx = L / (Nx - 1);
+k = 1;
+
+A = zeros(Nx, Nx)
+A(1, 1) = 1
+for i = 2:Nx-1
+    A(i, i-1) = -k / dx^2;
+    A(i, i) = 2*k / dx^2;
+    A(i, i+1) = -k / dx^2;
+end
+A(Nx, Nx) = 1;
+
+b = zeros(Nx, 1);
+b(1) = 500;
+b(Nx) = 200;
+
+T = inv(A)* b;
+
+x = linspace(0, L, Nx);
+plot(x, T);
+
+plot(x, T);
+tic
+toc
+
+
