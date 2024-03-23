@@ -1,0 +1,71 @@
+>> % Parameters
+L = 1; % Length of the beam
+P = 1000; % Load
+E = 2e9; % modulus of elasticity
+I = 1e-4; % moment of inertia
+n = 500; % number of divisions for FDM
+a = L / 2; % Location of point load
+
+% x values
+x = linspace(0, L, n);
+
+% Initialize arrays
+M = zeros(n, n); % Stiffness matrix
+F = zeros(n, 1); % Force vector
+
+% Construct stiffness matrix and force vector
+for i = 2:n-1
+    M(i, i-1:i+1) = [1 -2 1];
+    F(i) = -P * L^2 / 2;
+end
+
+% Boundary conditions
+M(1, 1) = 1;
+M(n, n) = 1;
+
+% Solve for deflection
+y = M \ F;
+
+% Correct the sign of the deflection
+y = -y;
+
+% Plot deflection
+figure;
+plot(x, y);
+title('FDM Deflection of Simply Supported Beam');
+xlabel('x');
+ylabel('Analytical FDM Deflection (m)');
+grid on;
+
+% Shear force diagram
+V = zeros(size(x));
+V(x < a) = -P / 2;
+V(x >= a) = P / 2;
+
+% Bending moment diagram
+M = zeros(size(x));
+M(x < a) = -P * x(x < a) / 2;
+M(x >= a) = P * (L - x(x >= a)) / 2;
+M = abs(M); % Take absolute value to get correct bending moment
+
+% Displacement 
+D = -(P * x .* (L - x).^2) / (6 * E * I * L);
+S = -(P * (L - x)) / (2 * E * I);
+
+% Plotting
+figure;
+
+subplot(4, 1, 1);
+plot(x, V, 'r');
+title('Analytical Shear Force Diagram');
+xlabel('x');
+ylabel('Shear Force (N)');
+grid on;
+
+subplot(4, 1, 2);
+plot(x, M, 'b');
+title('Bending Moment Diagram');
+xlabel('x');
+ylabel('Analytical Bending Moment (Nm)');
+grid on;
+>> 
